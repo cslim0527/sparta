@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+{% block content %}
+<section class="lists-view">
+    <div class="container">
+        <div class="btns-group">
+          <a href="#" class="button is-success">추가</a>
+          <button class="button is-danger" id="removeBtn">삭제</button>
+        </div>
+
+        <ul class="schd-lists">
+            <!-- 스케줄 1단위 -->
+            <li class="schd-item">
+                <div class="days">
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day every-week has-background-danger">매주</span>
+                </div>
+                <strong class="title textover">스케줄 타이틀 입니다.</strong>
+                <small class="time">시간</small>
+                <p class="summary textover">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore enim eos eum possimus! Accusantium amet architecto asperiores cupiditate, dolore doloribus, ea earum ipsam nihil obcaecati quam repellat tenetur, vitae voluptatibus.
+                </p>
+            </li>
+            <!-- //스케줄 1단위 -->
+        </ul>
+    </div>
+
+</section>
+{% endblock %}

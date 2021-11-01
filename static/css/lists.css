@@ -1,0 +1,90 @@
+/* common */
+.wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.textover {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-right: 20px;
+}
+
+/* header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* btns */
+.btns-group {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.btns-group .button {
+    flex: 1;
+}
+
+.btns-group .button:first-child {
+    margin-right: 10px;
+}
+
+/* lists */
+.schd-lists {
+
+}
+
+.schd-lists .schd-item {
+    padding: 20px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.schd-item .days {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.schd-item .title {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.schd-item .time {
+    color: #999;
+    font-size: 12px;
+}
+
+.schd-item .summary {
+    color: #777;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+/* icon-day */
+.icon-day {
+    font-size: 11px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 50%;
+    border: 1px solid #eaeaea;
+    margin-right: 5px;
+}
+
+.icon-day:last-child {
+    margin-right: 0;
+}
+
+.icon-day.every-week {
+    width: 30px;
+    border-radius: 6px;
+    color: #fff;
+    border-color: #e12147;
+}

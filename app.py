@@ -1,12 +1,12 @@
 from flask import Flask, redirect, url_for, render_template, jsonify, request, session
 import jwt
-import datetime
-
-app = Flask(__name__)
+from datetime import datetime
 import hashlib
 from pymongo import MongoClient
 
-client= MongoClient('mongodb://3.34.44.93', 27017, username="sparta", password="woowa")
+app = Flask(__name__)
+
+client = MongoClient('localhost', 27017)
 db = client.good4y
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
@@ -46,6 +46,27 @@ def login():
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+
+# [찬수] 스케줄 페이지 라우트 추가 20211102
+# 테스트 라우트
+@app.route('/lists')
+def lists():
+    # 토큰 값이 있다면 payload에서 확인한 id를 사용해 해당 멤버의 lists 데이터를 가져오기
+    id = 'tester@gmail.com'
+    schd_data = list(db.schedule.find({'id': id}, {'_id': False}))
+
+    # for item in schd_data:
+    #     time_obj = datetime.strptime(item.time, '%H:%M')
+    #     datetime.strftime(time_obj, '%p %H:%M')
+
+    return render_template('lists.html', test='test', schd_data=schd_data)
+
+# [찬수] 스케줄 페이지 라우트 추가 20211102
+# 스케줄 작성페이지
+@app.route('/write')
+def write():
+    return render_template('edit_example.html')
 
 #################################
 ##  로그인을 위한 API            ##

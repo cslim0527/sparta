@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
 
     <!-- Webpage Title -->
     <title>good4y</title>
@@ -11,27 +11,43 @@
 
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-		<!-- JS -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
+    {% block head %} {% endblock %}
 
     <script>
-      // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
-      function logout(){
-        $.removeCookie('mytoken');
-        alert('로그아웃!')
-        window.location.href='/login'
-      }
-
+        // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
+        }
     </script>
 
-  </head>
-  <body>
+</head>
+<body>
+    {% if test != 'test' %}
     <p>
-      <h1 class="title">로그인하고 5초 동안만 볼 수 있는 페이지입니다.</h1>
-      <h1 class="subtitle">계속 새로고침 해보세요</h1>
+        <h1 class="title">로그인하고 5초 동안만 볼 수 있는 페이지입니다.</h1>
+        <h1 class="subtitle">계속 새로고침 해보세요</h1>
     </p>
     <button class="button is-danger" onclick="logout()">로그아웃하기</button>
-  </body>
+    {% else %}
+        <div class="wrapper">
+            <header class="header">
+                <h1>
+                    <a href="/">
+                        <img src="../static/images/logo.png" alt="">
+                    </a>
+                </h1>
+            </header>
+            {% block content %} {% endblock %}
+        </div>
+    {% endif %}
+</body>
 </html>

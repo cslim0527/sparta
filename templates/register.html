@@ -1,0 +1,122 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- Webpage Title -->
+    <title>good4y</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script>
+        // 간단한 회원가입 함수입니다.
+        // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
+        function register() {
+
+
+            $.ajax({
+                type: "POST",
+                url: "/api/register",
+                data: {
+                    id_give: $('#userid').val(),
+                    pw_give: $('#userpw').val(),
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+        function check_dup() {
+            let username = $("#input-username").val()
+            console.log(username)
+            if (username == "") {
+                $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-username").focus()
+                return;
+            }
+            if (!is_nickname(username)) {
+                $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
+                $("#input-username").focus()
+                return;
+            }
+            $("#help-id").addClass("is-loading")
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/check_dup",
+                data: {
+                    username_give: username
+                },
+                success: function (response) {
+
+                    if (response["exists"]) {
+                        $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
+                        $("#input-username").focus()
+                    } else {
+                        $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
+                    }
+                    $("#help-id").removeClass("is-loading")
+
+                }
+            });
+        }
+
+        function is_password(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+
+    </script>
+</head>
+<body>
+<div class="section has-text-centered">
+    <h1 class="title">good4y</h1>
+    <h2 style="font-weight: bold"> 회원 가입 페이지 </h2>
+    <div class="box" style="width:50%; margin: auto; margin-top: 100px;">
+        <div class="field">
+            <label class="label" style="text-align: left " for="userid">ID</label>
+            <div class="control">
+                <input class="input" type="text" id="userid" placeholder="e.g. alex@example.com">
+            </div>
+            <div id="btn-check-dup" class="control">
+                <button class="button is-sparta" onclick="check_dup()">중복확인</button>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" style="text-align: left " for="userpw">Password</label>
+            <div class="control">
+                <input class="input" type="text" id="userpw" placeholder="********">
+            </div>
+            <div class="field">
+                <div class="control has-icons-left" style="width:100%">
+                    <input id="input-password2" class="input" type="text"
+                           placeholder="비밀번호 재입력">
+                    <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                </div>
+                <p></p>
+                <p id="help-password2" class="help"></p>
+                <p id="help-password" class="help">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용 가능합니다.</p>
+
+            </div>
+        </div>
+        <button class="button is-primary" onclick="register()">회원가입</button>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+

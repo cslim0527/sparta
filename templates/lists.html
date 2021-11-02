@@ -1,32 +1,115 @@
 {% extends "index.html" %}
+{% block head %}
+<link rel="stylesheet" href="../static/css/lists.css">
+<script defer src="../static/js/lists.js"></script>
+{% endblock %}
+
 {% block content %}
 <section class="lists-view">
     <div class="container">
         <div class="btns-group">
-          <a href="#" class="button is-success">추가</a>
-          <button class="button is-danger" id="removeBtn">삭제</button>
+            <div class="group before-group" id="beforeGroup">
+                <a href="#" class="button is-success">추가</a>
+                <button data-mode="on" class="button is-danger" id="removeModeBtn">삭제</button>
+            </div>
+            <div class="group after-group" id="afterGroup">
+                <button class="button" id="allSelBtn">전체선택</button>
+                <button class="button" id="backBtn">뒤로가기</button>
+            </div>
         </div>
 
         <ul class="schd-lists">
             <!-- 스케줄 1단위 -->
-            <li class="schd-item">
+            <li class="schd-item schdItem">
+                <input type="hidden" value="" class="">
+                <div class="round-cb">
+                    <input type="checkbox" id="listItem1">
+                    <label for="listItem1" class="fas fa-check-circle"></label>
+                </div>
                 <div class="days">
                     <span class="icon-day has-background-light">월</span>
-                    <span class="icon-day has-background-light">월</span>
-                    <span class="icon-day has-background-light">월</span>
-                    <span class="icon-day has-background-light">월</span>
-                    <span class="icon-day has-background-light">월</span>
-                    <span class="icon-day has-background-light">월</span>
-                    <span class="icon-day has-background-light">월</span>
+                    <span class="icon-day has-background-light">화</span>
+                    <span class="icon-day has-background-light">수</span>
+                    <span class="icon-day has-background-light">목</span>
+                    <span class="icon-day has-background-light">금</span>
+                    <span class="icon-day has-background-light">토</span>
+                    <span class="icon-day has-background-light">일</span>
                     <span class="icon-day every-week has-background-danger">매주</span>
                 </div>
-                <strong class="title textover">스케줄 타이틀 입니다.</strong>
-                <small class="time">시간</small>
+                <strong class="title textover">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A corporis dignissimos esse est ex exercitationem id iste nam possimus, voluptatum. Debitis dignissimos eaque eum, excepturi fugiat labore nostrum omnis sed.
+                </strong>
+                <small class="time">
+                    AM 11:00
+                </small>
                 <p class="summary textover">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore enim eos eum possimus! Accusantium amet architecto asperiores cupiditate, dolore doloribus, ea earum ipsam nihil obcaecati quam repellat tenetur, vitae voluptatibus.
                 </p>
+                <a href="#" class="mod-item-btn modItemBtn">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
             </li>
             <!-- //스케줄 1단위 -->
+
+            <li class="schd-item schdItem">
+            <input type="hidden" value="" class="">
+            <div class="round-cb">
+                <input type="checkbox" id="listItem2">
+                <label for="listItem2" class="fas fa-check-circle"></label>
+            </div>
+            <div class="days">
+            <span class="icon-day has-background-light">월</span>
+            <span class="icon-day has-background-light">화</span>
+            <span class="icon-day has-background-light">수</span>
+            <span class="icon-day has-background-light">목</span>
+            <span class="icon-day has-background-light">금</span>
+            <span class="icon-day has-background-light">토</span>
+            <span class="icon-day has-background-light">일</span>
+            <span class="icon-day every-week has-background-danger">매주</span>
+            </div>
+            <strong class="title textover">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A corporis dignissimos esse est ex exercitationem id iste nam possimus, voluptatum. Debitis dignissimos eaque eum, excepturi fugiat labore nostrum omnis sed.
+            </strong>
+            <small class="time">
+            AM 11:00
+            </small>
+            <p class="summary textover">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore enim eos eum possimus! Accusantium amet architecto asperiores cupiditate, dolore doloribus, ea earum ipsam nihil obcaecati quam repellat tenetur, vitae voluptatibus.
+            </p>
+            <a href="#" class="mod-item-btn modItemBtn">
+            <i class="fas fa-pencil-alt"></i>
+            </a>
+            </li>
+
+            <li class="schd-item schdItem">
+            <input type="hidden" value="" class="">
+            <div class="round-cb">
+                <input type="checkbox" id="listItem3">
+                <label for="listItem3" class="fas fa-check-circle"></label>
+            </div>
+            <div class="days">
+            <span class="icon-day has-background-light">월</span>
+            <span class="icon-day has-background-light">화</span>
+            <span class="icon-day has-background-light">수</span>
+            <span class="icon-day has-background-light">목</span>
+            <span class="icon-day has-background-light">금</span>
+            <span class="icon-day has-background-light">토</span>
+            <span class="icon-day has-background-light">일</span>
+            <span class="icon-day every-week has-background-danger">매주</span>
+            </div>
+            <strong class="title textover">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A corporis dignissimos esse est ex exercitationem id iste nam possimus, voluptatum. Debitis dignissimos eaque eum, excepturi fugiat labore nostrum omnis sed.
+            </strong>
+            <small class="time">
+            AM 11:00
+            </small>
+            <p class="summary textover">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore enim eos eum possimus! Accusantium amet architecto asperiores cupiditate, dolore doloribus, ea earum ipsam nihil obcaecati quam repellat tenetur, vitae voluptatibus.
+            </p>
+            <a href="#" class="mod-item-btn modItemBtn">
+            <i class="fas fa-pencil-alt"></i>
+            </a>
+            </li>
         </ul>
     </div>
 

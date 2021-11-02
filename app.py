@@ -23,9 +23,7 @@ SECRET_KEY = 'SPARTA'
 #################################
 ##  HTML을 주는 부분             ##
 #################################
-client = MongoClient('mongodb://test:test@localhost', 27017)
-db = client.good4y
-SECRET_KEY = 'sparta'
+
 #스케쥴 출력(메인화면)
 @app.route('/')
 def home():
@@ -33,7 +31,7 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.member.find_one({"id": payload['id']})
-        return render_template('index.html')
+        return render_template('lists.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -69,8 +67,8 @@ def api_register():
 
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
-    username_receive = request.form['username_give']
-    exists = bool(db.users.find_one({"username": username_receive}))
+    id_receive = request.form['id_give']
+    exists = bool(db.member.find_one({"id": id_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
 # [로그인 API]
@@ -108,7 +106,7 @@ def api_login():
 # 로그인된 유저만 call 할 수 있는 API입니다.
 # 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
 # (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/nick', methods=['GET'])
+@app.route('/api/email', methods=['GET'])
 def api_valid():
     token_receive = request.cookies.get('mytoken')
 
@@ -132,4 +130,4 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=5004, debug=True)

@@ -47,7 +47,6 @@ def login():
 def register():
     return render_template('register.html')
 
-# [찬수] 스케줄 페이지 라우트 추가 20211102
 # 스케줄 작성페이지
 @app.route('/write')
 def write():
@@ -55,7 +54,7 @@ def write():
     if token_receive is not None:
         return render_template('write.html')
     else:
-        return redirect(url_for("login", msg="로그인 필요"))
+        return render_template('write.html', isLogin=False, msg='로그인 후 이용하세요.')
 
 
 #################################
@@ -157,7 +156,6 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 
-# [찬수] 20211103
 # [리스트 삭제 API]
 @app.route('/api/remove', methods=['POST'])
 def api_remove():

@@ -81,16 +81,16 @@ def api_write():
     content_receive = request.form['content_give'] #추가 필요
     time1_receive = request.form['time1_give']  #time1 -> hour
     time2_receive = request.form['time2_give']  #time2 -> minute
-    day_receive = request.form['day_give']
+    day_receive = request.form.getlist('day_give[]')
     doc = {
         "id": id_receive,
-        "title": title_receive,
-        "time1": time1_receive, #시간
-        "time2": time2_receive, #분
-        "days": day_receive,
+        "subject": title_receive,
+        "time": time1_receive + ':' + time2_receive, #시간
+        "day": day_receive,
         "content": content_receive
     }
     db.schedule.insert_one(doc)
+    return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
 @app.route('/api/register', methods=['POST'])
 def api_register():

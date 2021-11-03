@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb://3.34.44.93',27017,username="sparta",password="woowa")
+client = MongoClient('mongodb://3.35.9.226', 27017, username="test", password="test")
 db = client.good4y
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
@@ -162,7 +162,7 @@ def api_remove():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5004, debug=True)
+    app.run('0.0.0.0', port=5000, debug=True)
 
 
 

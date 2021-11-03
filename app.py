@@ -25,12 +25,12 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        member = db.member.find_one({"id": payload['id']})
+        member = db.member.find_one({"id": payload['id']})['id']
         schd_data = list(db.schedule.find({'id': member}))
 
         # 시간 정보 AM/PM 포맷팅
         for item in schd_data:
-            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %H:%M')
+            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
         return render_template('lists.html', schd_data=schd_data)
     except jwt.ExpiredSignatureError:

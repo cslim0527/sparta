@@ -3,6 +3,7 @@ import jwt
 from datetime import datetime
 import hashlib
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -27,15 +28,15 @@ SECRET_KEY = 'SPARTA'
 #스케쥴 출력(메인화면)
 @app.route('/')
 def home():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        member = db.member.find_one({"id": payload['id']})
-        return render_template('lists.html')
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    # token_receive = request.cookies.get('mytoken')
+    # try:
+    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #     member = db.member.find_one({"id": payload['id']})
+        return render_template('index.html')
+    # except jwt.ExpiredSignatureError:
+    #     return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 @app.route('/login')
 def login():
@@ -52,13 +53,13 @@ def register():
 # 테스트 라우트
 @app.route('/lists')
 def lists():
-    # 토큰 값이 있다면 payload에서 확인한 id를 사용해 해당 멤버의 lists 데이터를 가져오기
+    # 토큰 값이 있다면 payload 에서 확인한 id를 사용해 해당 멤버의 lists 데이터를 가져오기
     id = 'tester@gmail.com'
-    schd_data = list(db.schedule.find({'id': id}, {'_id': False}))
+    schd_data = list(db.schedule.find({'id': id}))
 
-    # for item in schd_data:
-    #     time_obj = datetime.strptime(item.time, '%H:%M')
-    #     datetime.strftime(time_obj, '%p %H:%M')
+    # 시간 정보 AM/PM 포맷팅
+    for item in schd_data:
+        item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %H:%M')
 
     return render_template('lists.html', test='test', schd_data=schd_data)
 
@@ -150,5 +151,25 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
+
+# [찬수] 20211103
+# [리스트 삭제 API]
+@app.route('/api/remove', methods=['POST'])
+def api_remove():
+    remove_list_receive = request.form.getlist('remove_list_give[]')
+
+    if len(remove_list_receive):
+        for item_id in remove_list_receive:
+            db.schedule.delete_one({'_id': ObjectId(item_id)})
+        return jsonify({'result': 'success'})
+    else:
+        return jsonify({'result': 'fail', 'msg': '선택된 스케줄이 없습니다.'})
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5004, debug=True)
+
+
+
+
+

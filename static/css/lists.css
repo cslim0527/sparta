@@ -140,3 +140,9 @@
     color: #fff;
     border-color: #e12147;
 }
+
+.lists-view .remove-btn {
+    display: none;
+    margin-top: 20px;
+    width: 100%;
+}

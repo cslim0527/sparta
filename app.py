@@ -41,7 +41,6 @@ def home():
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
-    print(msg)
     return render_template('login.html', msg=msg)
 
 @app.route('/register')
@@ -53,15 +52,10 @@ def register():
 @app.route('/write')
 def write():
     token_receive = request.cookies.get('mytoken')
-    try :
-        if token_receive is not None:
-            return render_template('write.html')
-
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인이 필요합니다."))
-
+    if token_receive is not None:
+        return render_template('write.html')
+    else:
+        return redirect(url_for("login", msg="로그인 필요"))
 
 
 #################################
@@ -89,6 +83,7 @@ def api_write():
         "day": day_receive,
         "content": content_receive
     }
+
     db.schedule.insert_one(doc)
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 

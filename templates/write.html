@@ -1,128 +1,27 @@
 {% extends "index.html" %}
 {% block head %}
-    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
-    <script>
-        function schedule() {
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-            let time1 = $('#schedule-time1').val();
-            let time2 = $('#schedule-time2').val();
-            let option = $('#schedule-option').val();
-            let title = $('#schedule-title').val();
-            let content = $('#schedule-content').val();
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../static/css/write.css">
+<script defer src="../static/js/write.js"></script>
+<script>
 
-            if (title == "") {
-                $("#schedule-title").text("제목을 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-                $("#schedule-title").focus()
-                return;
-            }
-
-            if (content == "") {
-                $("#schedule-content").text("제목을 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-                $("#schedule-content").focus()
-                return;
-            }
-
-            $.ajax({
-                type: "POST",
-                url: "/schedule",
-                data: {
-                    time1_give: time1,
-                    time2_give: time2,
-                    option_give: option,
-                    title_give: title,
-                    content_give: content
-                },
-                success: function (response) {
-                    alert(response["msg"]);
-                    window.location.reload()
-                }
-            })
-        }
-
-        function doSave() {
-            let days = document.getElementsByName("day");
-            let checked_day = [];
-            for (let i = 0; i < days.length; i++) {
-                if (days[i].checked) {
-                    checked_day.push(days[i].value);
-                }
-
-                if (checked_day == 0) {
-                    alert('선택된 체크박스가 없습니다');
-                    return false;
-                }
-
-                document.frm.action = "delete.php";
-                document.frm.submit();
-
-            }
-        }
-
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <style>
-        * {
-            font-family: "Do Hyeon", sans-serif;
-        }
-
-        .date {
-            width: 600px;
-            margin: 200px auto 50px auto;
-            display: block;
-        }
-
-        input-date {
-            margin-top: 150px;
-            margin-bottom: 24px;
-        }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<style>
 
 
-        .content {
-            width: 600px;
-            margin: auto;
-            display: block;
-        }
-
-        .btn-register {
-            width: 100px;
-            margin: 50px auto 150px auto;
-            display: block;
-        }
-
-        .input-option {
-            margin-bottom: 50px;
-        }
-
-        input-content {
-            width: 500px;
-            height: 300px;
-        }
-
-        .check-box {
-            width: 450px;
-            margin-left: auto;
-            display: block;
-        }
-
-        .time {
-            margin: 3px 60px 0px 170px;
-        }
-
-        .wrap {
-            margin-top: 150px;
-            margin-bottom: 200px;
-        }
-
-
-    </style>
+</style>
 
 {% endblock %}
 
 {% block content %}
-    <div class="wrap">
+<div class="wrap">
     <div class="date">
         <div class="check-box">
             <form method="get" action="javascript:doSave(document.frm);">
@@ -258,7 +157,11 @@
             <textarea id="schedule-content" class="textarea" placeholder="내용을 입력하세요" rows="10"></textarea>
         </div>
     </div>
-    <button class="button is-primary btn-register" onclick="schedule()">등록하기</button>
+    <div class="btn-register">
+        <button class="button is-primary" onclick="location.href='/' ">뒤로가기</button>
+        <button class="button is-primary" onclick="schedule()">등록하기</button>
+
+    </div>
 
 </div>
 {% endblock %}

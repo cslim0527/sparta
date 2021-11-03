@@ -1,25 +1,20 @@
 from flask import Flask, redirect, url_for, render_template, jsonify, request, session
 import jwt
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://3.34.44.93',27017,username="sparta",password="woowa")
 db = client.good4y
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
 SECRET_KEY = 'SPARTA'
 
-# JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 
-# 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-
-# 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
-# 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 
 #################################
 ##  HTML을 주는 부분             ##
@@ -32,7 +27,7 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.member.find_one({"id": payload['id']})
-        return render_template('lists.html')
+        return render_template('index.html',id=member)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -86,13 +81,15 @@ def write():
 def api_register():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
-
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-
-    db.member.insert_one({'id': id_receive, 'pw': pw_hash})
-
+    doc = {
+        "id": id_receive,                               # 아이디
+        "pw": pw_hash,                                  # 비밀번호
+    }
+    db.member.insert_one(doc)
     return jsonify({'result': 'success'})
 
+#아이디 중복확인 서버
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
     id_receive = request.form['id_give']
@@ -103,28 +100,20 @@ def check_dup():
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
 def api_login():
+    # 로그인
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
 
-    # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-
-    # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
     result = db.member.find_one({'id': id_receive, 'pw': pw_hash})
 
-    # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
-        # JWT 토큰에는, payload와 시크릿키가 필요합니다.
-        # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
-        # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
-        # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
-            'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+         'id': id_receive,
+         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-        # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
     # 찾지 못하면
     else:

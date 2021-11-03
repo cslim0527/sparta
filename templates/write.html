@@ -1,91 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/html">
-
-<head>
-    <!-- Webpage Title -->
-    <title>good4y</title>
-
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
-
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-
-    <!-- 구글폰트 -->
+{% extends "index.html" %}
+{% block head %}
     <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
-
-    <script type="text/javascript">
-
-
-    </script>
-
-    <style type="text/css">
-        * {
-            font-family: "Do Hyeon", sans-serif;
-        }
-
-        .date {
-            width: 600px;
-            margin: 200px auto 50px auto;
-            display: block;
-        }
-
-        input-date {
-            margin-top: 150px;
-            margin-bottom: 24px;
-        }
-
-
-        .content {
-            width: 600px;
-            margin: auto;
-            display: block;
-        }
-
-        .btn-register {
-            width: 100px;
-            margin: 50px auto 150px auto;
-            display: block;
-        }
-
-        .input-option {
-            margin-bottom: 50px;
-        }
-
-        input-content {
-            width: 500px;
-            height: 300px;
-        }
-
-        .check-box {
-            width: 450px;
-            margin-left: auto;
-            display: block;
-        }
-
-        .time {
-            margin: 3px 60px 0px 170px;
-        }
-
-        .wrap {
-            margin-top: 150px;
-            margin-bottom: 200px;
-        }
-
-
-    </style>
     <script>
         function schedule() {
 
@@ -144,10 +59,70 @@
         }
 
     </script>
-</head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <style>
+        * {
+            font-family: "Do Hyeon", sans-serif;
+        }
 
-<body>
-<div class="wrap">
+        .date {
+            width: 600px;
+            margin: 200px auto 50px auto;
+            display: block;
+        }
+
+        input-date {
+            margin-top: 150px;
+            margin-bottom: 24px;
+        }
+
+
+        .content {
+            width: 600px;
+            margin: auto;
+            display: block;
+        }
+
+        .btn-register {
+            width: 100px;
+            margin: 50px auto 150px auto;
+            display: block;
+        }
+
+        .input-option {
+            margin-bottom: 50px;
+        }
+
+        input-content {
+            width: 500px;
+            height: 300px;
+        }
+
+        .check-box {
+            width: 450px;
+            margin-left: auto;
+            display: block;
+        }
+
+        .time {
+            margin: 3px 60px 0px 170px;
+        }
+
+        .wrap {
+            margin-top: 150px;
+            margin-bottom: 200px;
+        }
+
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <div class="wrap">
     <div class="date">
         <div class="check-box">
             <form method="get" action="javascript:doSave(document.frm);">
@@ -160,7 +135,6 @@
                 <label><input type="checkbox" name="day" value="sunday"> 일</label>
                 <label><input type="checkbox" name="day" value="everyweek"> 매주</label>
             </form>
-
         </div>
 
         <div class="input-group mb-3 input-option">
@@ -287,8 +261,5 @@
     <button class="button is-primary btn-register" onclick="schedule()">등록하기</button>
 
 </div>
+{% endblock %}
 
-
-</body>
-
-</html>

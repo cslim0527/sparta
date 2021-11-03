@@ -15,7 +15,6 @@ db = client.good4y
 SECRET_KEY = 'SPARTA'
 
 
-
 #################################
 ##  HTML을 주는 부분             ##
 #################################
@@ -27,7 +26,13 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.member.find_one({"id": payload['id']})
-        return render_template('index.html',id=member)
+        schd_data = list(db.schedule.find({'id': member}))
+
+        # 시간 정보 AM/PM 포맷팅
+        for item in schd_data:
+            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %H:%M')
+
+        return render_template('lists.html', schd_data=schd_data)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -43,32 +48,16 @@ def login():
 def register():
     return render_template('register.html')
 
-
-# [찬수] 스케줄 페이지 라우트 추가 20211102
-# 테스트 라우트
-@app.route('/lists')
-def lists():
-    # 토큰 값이 있다면 payload 에서 확인한 id를 사용해 해당 멤버의 lists 데이터를 가져오기
-    id = 'tester@gmail.com'
-    schd_data = list(db.schedule.find({'id': id}))
-
-    # 시간 정보 AM/PM 포맷팅
-    for item in schd_data:
-        item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %H:%M')
-
-    return render_template('lists.html', test='test', schd_data=schd_data)
-
 # [찬수] 스케줄 페이지 라우트 추가 20211102
 # 스케줄 작성페이지
 @app.route('/write')
 def write():
     # u_id = request.args.get('u_id')
     # schd_item = None
-    #
     # if u_id is not None:
     #     schd_item = db.schedule.find_one({'_id': ObjectId(u_id)})
 
-    return render_template('edit_example.html')
+    return render_template('write.html')
 
 #################################
 ##  로그인을 위한 API            ##

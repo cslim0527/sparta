@@ -52,6 +52,7 @@
                     pw_give: password
                 },
                 success: function (response) {
+                    console.log(response)
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         window.location.replace("/")

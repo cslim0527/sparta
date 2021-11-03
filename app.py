@@ -52,12 +52,17 @@ def register():
 # 스케줄 작성페이지
 @app.route('/write')
 def write():
-    # u_id = request.args.get('u_id')
-    # schd_item = None
-    # if u_id is not None:
-    #     schd_item = db.schedule.find_one({'_id': ObjectId(u_id)})
+    token_receive = request.cookies.get('mytoken')
+    try :
+        if token_receive is not None:
+            return render_template('write.html')
 
-    return render_template('write.html')
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인이 필요합니다."))
+
+
 
 #################################
 ##  로그인을 위한 API            ##
@@ -66,6 +71,27 @@ def write():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
+@app.route('/api/write', methods=['POST'])
+def api_write():
+    token_receive = request.cookies.get('mytoken')  #토큰 받아서 디코드
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+    id_receive = payload['id']
+    title_receive = request.form['title_give']
+    content_receive = request.form['content_give'] #추가 필요
+    time1_receive = request.form['time1_give']  #time1 -> hour
+    time2_receive = request.form['time2_give']  #time2 -> minute
+    day_receive = request.form['day_give']
+    doc = {
+        "id": id_receive,
+        "title": title_receive,
+        "time1": time1_receive, #시간
+        "time2": time2_receive, #분
+        "days": day_receive,
+        "content": content_receive
+    }
+    db.schedule.insert_one(doc)
+
 @app.route('/api/register', methods=['POST'])
 def api_register():
     id_receive = request.form['id_give']

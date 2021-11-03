@@ -42,7 +42,7 @@
             success: function (response) {
                 if (response['result'] == 'success') {
                     alert('삭제되었습니다.')
-                    window.location.href = '/lists'
+                    window.location.href = '/'
                 } else {
                     alert(response['msg'])
                 }

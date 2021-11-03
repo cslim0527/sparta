@@ -1,0 +1,51 @@
+* {
+    font-family: "Do Hyeon", sans-serif;
+}
+
+.date {
+    width: 600px;
+    margin: 200px auto 50px auto;
+    display: block;
+}
+
+input-date {
+    margin-top: 150px;
+    margin-bottom: 24px;
+}
+
+
+.content {
+    width: 600px;
+    margin: auto;
+    display: block;
+}
+
+.btn-register {
+    width: 100px;
+    margin: auto;
+    display: block;
+}
+
+.input-option {
+    margin-bottom: 50px;
+}
+
+input-content {
+    width: 500px;
+    height: 300px;
+}
+
+.check-box {
+    width: 450px;
+    margin-left: auto;
+    display: block;
+}
+
+.time {
+    margin: 3px 60px 0px 170px;
+}
+
+.wrap {
+    margin-top: 150px;
+    margin-bottom: 200px;
+}

@@ -30,7 +30,7 @@ def home():
 
         # 시간 정보 AM/PM 포맷팅
         for item in schd_data:
-            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %H:%M')
+            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
         return render_template('lists.html', schd_data=schd_data)
     except jwt.ExpiredSignatureError:

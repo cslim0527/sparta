@@ -1,21 +1,20 @@
-
 <!doctype html>
 <html lang="en">
 <head>
 
-    <!-- Webpage Title -->
+    <!— Webpage Title —>
     <title>good4y</title>
 
-    <!-- Required meta tags -->
+    <!— Required meta tags —>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bulma CSS -->
+    <!— Bulma CSS —>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-    <!-- Font Awesome CSS -->
+    <!— Font Awesome CSS —>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- JS -->
+    <!— JS —>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
@@ -122,7 +121,7 @@
 
                     if (response["exists"]) {
                         $("#help-id").text("이미 존재하는 이메일입니다.").removeClass("is-safe").addClass("is-danger")
-                        $("#userid").focus()
+                        $("#userid").val("").focus();
                     } else {
                         $("#help-id").text("사용할 수 있는 이메일입니다.").removeClass("is-danger").addClass("is-success")
                     }
@@ -178,7 +177,3 @@
 </div>
 </body>
 </html>
-
-
-
-

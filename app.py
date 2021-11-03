@@ -28,15 +28,15 @@ SECRET_KEY = 'SPARTA'
 #스케쥴 출력(메인화면)
 @app.route('/')
 def home():
-    # token_receive = request.cookies.get('mytoken')
-    # try:
-    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    #     member = db.member.find_one({"id": payload['id']})
-        return render_template('index.html')
-    # except jwt.ExpiredSignatureError:
-    #     return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    # except jwt.exceptions.DecodeError:
-    #     return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        member = db.member.find_one({"id": payload['id']})
+        return render_template('lists.html')
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login"))
 
 @app.route('/login')
 def login():
@@ -67,6 +67,12 @@ def lists():
 # 스케줄 작성페이지
 @app.route('/write')
 def write():
+    # u_id = request.args.get('u_id')
+    # schd_item = None
+    #
+    # if u_id is not None:
+    #     schd_item = db.schedule.find_one({'_id': ObjectId(u_id)})
+
     return render_template('edit_example.html')
 
 #################################

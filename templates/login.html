@@ -17,6 +17,7 @@
 
 
     <script>
+
         {% if msg %}
             alert("{{ msg }}")
         {% endif %}
@@ -30,16 +31,18 @@
             let password = $("#userpw").val()
 
             if (useremail == "") {
-                $("#help-id-login").text("이메일을 입력해주세요.")
+                $("#help-id-login").text("")
                 $("#userid").focus()
+                alert ("이메일을 입력해주세요.")
                 return;
             } else {
                 $("#help-id-login").text("")
             }
 
             if (password == "") {
-                $("#help-password-login").text("비밀번호를 입력해주세요.")
+                $("#help-password-login").text("")
                 $("#userpw").focus()
+                alert("비밀번호를 입력해주세요.")
                 return;
             } else {
                 $("#help-password-login").text("")
@@ -60,8 +63,8 @@
                         alert(response['msg'])
                     }
                 }
-            });
-        }
+            });}
+
 
         function register() {
             window.location.href = "/register"
@@ -82,17 +85,17 @@
                 <input class="input" type="text" id="userid" placeholder="e.g. alex@example.com">
             </div>
         </div>
-
         <div class="field">
             <label class="label" style="text-align: left " for="userpw">Password</label>
             <div class="control">
-                <input class="input" type="text" id="userpw" placeholder="********">
+                <input class="input" type="password" id="userpw"  placeholder="********" />
             </div>
         </div>
-        <button class="button is-primary" onclick="login()">로그인</button>
+        <button class="button is-primary"  onclick="login()">Sign in</button>
         <button class="button is-primary" onclick="register()">회원가입</button>
     </div>
 </div>
 
 </body>
+
 </html>

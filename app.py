@@ -26,13 +26,15 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.member.find_one({"id": payload['id']})['id']
+        # area = db.member.find_one({"id": payload['id']})['area']  가입시 입력된 정보로 nx ny 찾아주기
         schd_data = list(db.schedule.find({'id': member}))
+        area = ["60", "126"]
 
         # 시간 정보 AM/PM 포맷팅
         for item in schd_data:
             item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
-        return render_template('lists.html', schd_data=schd_data)
+        return render_template('lists.html', schd_data=schd_data, area=area)  # area = area => 지역정보 넘겨주기
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -65,7 +67,7 @@ def write():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@app.route('/api/write', methods=['POST'])
+@app.route('/api/write', methods=['POST', 'GET'])
 def api_write():
     token_receive = request.cookies.get('mytoken')  #토큰 받아서 디코드
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -85,6 +87,7 @@ def api_write():
     }
 
     db.schedule.insert_one(doc)
+
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
 @app.route('/api/register', methods=['POST'])
@@ -129,32 +132,8 @@ def api_login():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
-# [유저 정보 확인 API]
-# 로그인된 유저만 call 할 수 있는 API입니다.
-# 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
-# (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/email', methods=['GET'])
-def api_valid():
-    token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
-    try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
-
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-
-        member = db.member.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success'})
-    except jwt.ExpiredSignatureError:
-        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+@app.route('/api/weather', methods=['GET']) #도시의 nx, ny 정보를 받아 날씨 정보를 얻는다
+def weather_receive():{}
 
 
 # [찬수] 20211103

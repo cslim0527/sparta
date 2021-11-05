@@ -36,21 +36,27 @@
         ajaxRemoveList(removeListArr)
     })
 
-    function weather(date, time, nx, ny) { //기상청 api 조회하기
-            serviceKey = 'OOH9Erw93X1Lk223Bku2k%2FdZPNnhauLD%2FC8%2BL%2Fy29Zhldy5YRVPPtpAz6PINeWy15lu1IPJ88xLqIHv9Orb9PA%3D%3D'
-            baseDate = 20211104
-            baseTime = 1100
-            nx = 60
-            ny = 127
-            $.ajax({
-                type: "GET",
-                url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey="+serviceKey+"&base_date="+baseDate+"&base_time="+baseTime+"&nx="+nx+"&ny="+ny+"&pageNo=1&numOfRows=14&_type=json",
-                data: {},
-                success: function (response) {
-                    console.log(response)
-                }
-            })
-        }
+    function weather(nx, ny) { //기상청 api 조회하기
+        var today = new Date();
+        var hours = ('0' + today.getHours()).slice(-2);
+        var minutes = ('0' + today.getMinutes()).slice(-2);
+        var timeString = hours + minutes
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var dateString = year + month + day;
+
+        serviceKey = 'OOH9Erw93X1Lk223Bku2k%2FdZPNnhauLD%2FC8%2BL%2Fy29Zhldy5YRVPPtpAz6PINeWy15lu1IPJ88xLqIHv9Orb9PA%3D%3D'
+        baseDate = dateString
+        baseTime = timeString
+
+        $.ajax({
+            type: "GET",
+            url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=" + serviceKey + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny + "&pageNo=1&numOfRows=14&_type=json",
+            data: {},
+            success: function (response) {}
+        })
+    }
 
     function ajaxRemoveList(removeListArr) {
         $.ajax({

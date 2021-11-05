@@ -33,8 +33,8 @@ def home():
         area = ["60", "126"]
 
         # 시간 정보 AM/PM 포맷팅
-        # for item in schd_data:
-        #     item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
+        for item in schd_data:
+            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
         return render_template('lists.html', schd_data=schd_data, area=area, userId=member)  # area = area => 지역정보 넘겨주기
     except jwt.ExpiredSignatureError:
@@ -103,6 +103,7 @@ def api_edit():
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
     id_receive = payload['id']
+    _id = request.form['_id']
     title_receive = request.form['title_give']
     content_receive = request.form['content_give']  # 추가 필요
     time1_receive = request.form['time1_give']  # time1 -> hour
@@ -116,7 +117,7 @@ def api_edit():
         "content": content_receive
     }
 
-    db.schedule.update_one(doc)
+    db.schedule.update_one({'_id': ObjectId(_id)}, {'$set': doc})
 
     return jsonify({'result': 'success', 'msg': '수정되었습니다.'})
 

@@ -216,7 +216,8 @@
     }
 
     function getListHtmls(data) {
-        let i = i++
+        let i = 0
+        i++
         const daysTemp = getDayIconTemp(data.day)
         const formattedTime =  getAMPM(data.time)
 

@@ -43,7 +43,7 @@ function schedule() {
         },
         success: function (response) {
             alert(response["msg"]);
-            // window.location.reload()
+            window.location.href = '/'
         }
     })
 }
@@ -54,13 +54,15 @@ $('#apply').click(function () {
 });
 
 function edit() {
+    let params = new URLSearchParams(document.location.search.substring(1))
+    let u_id = params.get("u_id")
+
     var day = $('input[name="day"]');
 
     var days = $.map(day, function (v) {
             return v.checked
         }
     );
-
 
     let time1 = $('#schedule-time1').val();
     let time2 = $('#schedule-time2').val();
@@ -71,6 +73,7 @@ function edit() {
         type: "POST",
         url: "/api/edit",
         data: {
+            _id: u_id,
             time1_give: time1,
             time2_give: time2,
             title_give: title,

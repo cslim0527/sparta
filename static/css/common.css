@@ -2,7 +2,7 @@
 .wrapper {
     max-width: 960px;
     margin: 0 auto;
-    padding: 40px;
+    padding: 60px;
 }
 
 .textover {
@@ -17,8 +17,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     position: relative;
+}
+
+.header .logo {
+    width: 280px;
+    position: relative;
+    top: 5px;
+}
+
+.header .logo a {
+    display: block;
+}
+
+.header .logo a img {
+    display: block;
+    width: 100%;
 }
 
 .header .logout-btn {

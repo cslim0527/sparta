@@ -41,8 +41,8 @@
                     </form>
                 </div>
                 <div>
-                    <div id="schedule-time1" class="select">
-                        <select>
+                    <div class="select">
+                        <select id="schedule-time1">
                             <option value="00" {{ "selected" if schedules.time.split(':')[0] == '00' else "" }}>00
                             </option>
                             <option value="01" {{ "selected" if schedules.time.split(':')[0] == '01' else "" }}>01
@@ -93,8 +93,8 @@
                             </option>
                         </select>
                     </div>
-                    <div id="schedule-time2" class="select">
-                        <select>
+                    <div class="select">
+                        <select id="schedule-time2">
                             <option value="00" {{ "selected" if schedules.time.split(':')[1] == '00' else "" }}>00
                             </option>
                             <option value="01" {{ "selected" if schedules.time.split(':')[1] == '01' else "" }}>01
@@ -371,7 +371,7 @@
         </div>
         <div class="btn">
             <button class="button is-danger button1" onclick="location.href='/' ">뒤로가기</button>
-            <button class="button is-primary button2" onclick="schedule()">뒤로가기</button>
+            <button class="button is-primary button2" onclick="schedule()">등록하기</button>
         </div>
     {% endif %}
 {% endblock %}

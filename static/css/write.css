@@ -74,4 +74,8 @@ input-content {
     text-align: center;
 }
 
+.logout-btn {
+    display: none;
+}
+
 

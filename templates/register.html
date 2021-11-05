@@ -1,38 +1,25 @@
-<!doctype html>
-<html lang="en">
-<head>
-
-    <!— Webpage Title —>
-    <title>good4y</title>
-
-    <!— Required meta tags —>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!— Bulma CSS —>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-    <!— Font Awesome CSS —>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    {#    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
-
-    <!— JS —>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
+{% extends "index.html" %}
+{% block head %}
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/register.css">
+    <script defer src="../static/js/register.js"></script>
     <style>
-        .is-sparta{
+        .is-sparta {
             background-color: red;
             border-color: transparent;
             color: #fff !important;
         }
-        .fa-check-circle{
-            background-color:white !important;
+
+        .fa-check-circle {
+            background-color: white !important;
             border-color: #d3d3d3 !important;
-            color : #009000 !important;
+            color: #009000 !important;
         }
 
+        .logout-btn {
+            display: none;
+        }
     </style>
-
     <script>
 
 
@@ -43,7 +30,6 @@
             let useremail = $("#userid").val()
             let password = $("#userpw").val()
             let password2 = $("#userpw2").val()
-
 
 
             if ($("#help-id").hasClass("is-danger")) {
@@ -100,6 +86,7 @@
             var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
             return regExp.test(asValue);
         }
+
         function check_dup() {
 
             let useremail = $("#userid").val()
@@ -128,7 +115,7 @@
                         $("#help-id").text("이미 존재하는 이메일입니다.").removeClass("is-safe").addClass("is-danger")
                         $("#userid").val("").focus()
 
-                    } else{
+                    } else {
                         $("#help-id").text("사용가능한 이메일입니다.").removeClass("is-danger").addClass("is-success")
                         $('#userid').attr("check_result", "success");
                         $('#check_dup').addClass("far fa-check-circle ").text("");
@@ -143,7 +130,7 @@
                 {#const btn = $("#check_dup").hasClass("button is-sparta")#}
                 $("#check_dup").text("중복확인").removeClass("far fa-check-circle").addClass("button is-sparta")
                 $("#help-id").text("").removeClass("helpid")
-                $("#register").attr('disabled','disabled');
+                $("#register").attr('disabled', 'disabled');
                 allcheck();
             })
             $("#userpw").on("propertychange change keyup paste input", function () {
@@ -154,77 +141,70 @@
             })
         });
 
-        $(function(){
-            $("#register").on('click',function(){
+        $(function () {
+            $("#register").on('click', function () {
                 register();
             });
-            $('.input').keyup(function (e){
+            $('.input').keyup(function (e) {
                 if (e.keyCode == 13) {
                     register();
                 }
             });
         });
 
-        function allcheck(){
+        function allcheck() {
             let useremail = $("#userid").val()
             let password = $("#userpw").val()
             let password2 = $("#userpw2").val()
             const btn = $("#check_dup").text() == "중복확인"
-            console.log(btn)
 
-            if (useremail != "" && password != "" && password2 !="" && btn != true) {
+            if (useremail != "" && password != "" && password2 != "" && btn != true) {
                 $("#register").removeAttr('disabled');
             }
         }
 
 
-
-
-
     </script>
-</head>
+{% endblock %}
 
-
-<body>
-<div class="section has-text-centered">
-    <h1 class="title">good4y</h1>
-    <h2 style="font-weight: bold"> 회원 가입 페이지 </h2>
-    <div class="box" style="width:50%; margin: auto; margin-top: 30px;">
-        <label class="label" style="text-align: left " for="userid">ID</label>
-        <div class="field has-addons">
-            <div class="control has-icons-left" style="width:100%">
-                <input id="userid" class="input" change type="text" placeholder="e.g. alex@example.com" check_result="fail" required />
-                <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
-            </div>
-            <div id="btn-check-dup" class="control">
-                <button id=check_dup class="button is-sparta" onclick="check_dup()">중복확인</button>
-
-            </div>
-            {#                <img id="id_check_sucess" style="display: none;">#}
-
-        </div>
-        <p class="helpid" id="help-id" style="color: red"></p>
-
-        <div class="field">
-            <div class="control has-icons-left">
-                <label class="label" style="text-align: left " for="userpw">Password</label>
-                <div class="control">
-                    <input class="input" type="password" id="userpw" placeholder="********">
-                    <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
-                </div>
-                <p id="help-password" class="help">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용 가능합니다.</p>
-            </div>
-            <div class="field">
+{% block content %}
+    <div class="section has-text-centered">
+        <div class="box" style="width:50%; margin: auto; margin-top: 30px;">
+            <label class="label" style="text-align: left " for="userid">ID</label>
+            <div class="field has-addons">
                 <div class="control has-icons-left" style="width:100%">
-                    <input id="userpw2" class="input" type="password"
-                           placeholder="비밀번호 재입력">
-                    <span class ="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                    <input id="userid" class="input" change type="text" placeholder="e.g. alex@example.com"
+                           check_result="fail" required/>
+                    <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
                 </div>
-                <p id="help-password2" class="help"></p>
+                <div id="btn-check-dup" class="control">
+                    <button id=check_dup class="button is-sparta" onclick="check_dup()">중복확인</button>
+
+                </div>
+                {#                <img id="id_check_sucess" style="display: none;">#}
+
             </div>
+            <p class="helpid" id="help-id" style="color: red"></p>
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <label class="label" style="text-align: left " for="userpw">Password</label>
+                    <div class="control">
+                        <input class="input" type="password" id="userpw" placeholder="********">
+                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                    </div>
+                    <p id="help-password" class="help">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용 가능합니다.</p>
+                </div>
+                <div class="field">
+                    <div class="control has-icons-left" style="width:100%">
+                        <input id="userpw2" class="input" type="password"
+                               placeholder="비밀번호 재입력">
+                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                    </div>
+                    <p id="help-password2" class="help"></p>
+                </div>
+            </div>
+            <button id=register class="button is-primary" onclick="register()">회원가입</button>
         </div>
-        <button id=register class="button is-primary" onclick="register()">회원가입</button>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

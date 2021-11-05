@@ -32,8 +32,8 @@ def home():
         area = ["60", "126"]
 
         # 시간 정보 AM/PM 포맷팅
-        for item in schd_data:
-            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
+        # for item in schd_data:
+        #     item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
         return render_template('lists.html', schd_data=schd_data, area=area, userId=member)  # area = area => 지역정보 넘겨주기
     except jwt.ExpiredSignatureError:
@@ -53,6 +53,7 @@ def register():
     return render_template('register.html')
 
 
+# [찬수] 스케줄 페이지 라우트 추가 20211102
 # 스케줄 작성페이지
 @app.route('/write')
 def write():
@@ -96,6 +97,30 @@ def api_write():
     db.schedule.insert_one(doc)
 
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
+
+
+@app.route('/api/edit', methods=['POST'])
+def api_edit():
+    token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+    id_receive = payload['id']
+    title_receive = request.form['title_give']
+    content_receive = request.form['content_give']  # 추가 필요
+    time1_receive = request.form['time1_give']  # time1 -> hour
+    time2_receive = request.form['time2_give']  # time2 -> minute
+    day_receive = request.form.getlist('day_give[]')
+    doc = {
+        "id": id_receive,
+        "subject": title_receive,
+        "time": time1_receive + ':' + time2_receive,  # 시간
+        "day": day_receive,
+        "content": content_receive
+    }
+
+    db.schedule.update_one(doc)
+
+    return jsonify({'result': 'success', 'msg': '수정되었습니다.'})
 
 
 @app.route('/api/register', methods=['POST'])
@@ -143,34 +168,11 @@ def api_login():
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
-# [유저 정보 확인 API]
-# 로그인된 유저만 call 할 수 있는 API입니다.
-# 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
-# (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/email', methods=['GET'])
-def api_valid():
-    token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
-    try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
-
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-
-        member = db.member.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success'})
-    except jwt.ExpiredSignatureError:
-        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+@app.route('/api/weather', methods=['GET'])  # 도시의 nx, ny 정보를 받아 날씨 정보를 얻는다
+def weather_receive(): {}
 
 
+# [찬수] 20211103
 # [리스트 삭제 API]
 @app.route('/api/remove', methods=['POST'])
 def api_remove():
@@ -183,12 +185,13 @@ def api_remove():
     else:
         return jsonify({'result': 'fail', 'msg': '선택된 스케줄이 없습니다.'})
 
+
 # [리스트 정렬 API]
 @app.route('/api/sort', methods=['POST'])
 def api_sort():
     filtered_receive = request.form['filtered_give']
 
-    if filtered_receive: ## 금일 스케줄 보기중 일때
+    if filtered_receive:  ## 금일 스케줄 보기중 일때
         id_receive = request.form['id_give']
         action_receive = request.form['action_give']
         now_receive = request.form.getlist('now_give[]')

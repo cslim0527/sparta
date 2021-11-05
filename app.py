@@ -55,10 +55,14 @@ def register():
 @app.route('/write')
 def write():
     token_receive = request.cookies.get('mytoken')
+    u_id = request.args.get('u_id')
     if token_receive is not None:
+        if u_id is not None:
+            schedules = db.schedule.find_one({'_id': ObjectId(u_id)})
+            return render_template('write.html', schedules=schedules)
         return render_template('write.html')
     else:
-        return redirect(url_for("login", msg="로그인 필요"))
+        return render_template('write.html', isLogin=False, msg='로그인 후 이용하세요.')
 
 
 #################################
@@ -176,7 +180,6 @@ def api_filter():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
 
 
 

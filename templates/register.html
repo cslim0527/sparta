@@ -20,10 +20,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <style>
-        .button.is-sparta {
-            background-color: #e8344e;
+        .is-sparta{
+            background-color: red;
             border-color: transparent;
             color: #fff !important;
+        }
+        .fa-check-circle{
+            background-color:white !important;
+            border-color: #d3d3d3 !important;
+            color : #009000 !important;
         }
 
     </style>
@@ -126,7 +131,7 @@
                     } else{
                         $("#help-id").text("사용가능한 이메일입니다.").removeClass("is-danger").addClass("is-success")
                         $('#userid').attr("check_result", "success");
-                        $('#check_dup').addClass("far fa-check-circle").text("");
+                        $('#check_dup').addClass("far fa-check-circle ").text("");
                     }
                     allcheck();
                 }

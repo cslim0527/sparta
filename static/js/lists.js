@@ -32,6 +32,22 @@
         ajaxRemoveList(removeListArr)
     })
 
+    function weather(date, time, nx, ny) { //기상청 api 조회하기
+            serviceKey = 'OOH9Erw93X1Lk223Bku2k%2FdZPNnhauLD%2FC8%2BL%2Fy29Zhldy5YRVPPtpAz6PINeWy15lu1IPJ88xLqIHv9Orb9PA%3D%3D'
+            baseDate = 20211104
+            baseTime = 1100
+            nx = 60
+            ny = 127
+            $.ajax({
+                type: "GET",
+                url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey="+serviceKey+"&base_date="+baseDate+"&base_time="+baseTime+"&nx="+nx+"&ny="+ny+"&pageNo=1&numOfRows=14&_type=json",
+                data: {},
+                success: function (response) {
+                    console.log(response)
+                }
+            })
+        }
+
     function ajaxRemoveList(removeListArr) {
         $.ajax({
             type: "POST",

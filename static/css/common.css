@@ -21,7 +21,7 @@
     position: relative;
 }
 
-.header .logout-btn {
+.header .login-btn {
     position: absolute;
     right: 0;
     top: 50%;
@@ -43,24 +43,7 @@
 	color: #FFFFFF;
 	font-size: 11px;
 	z-index: 9999;
-    /*width: 70px;*/
+    width: 70px;
     padding: 6px;
     border-radius: 4px;
-}
-
-/* logout-modal */
-.logout-modal .logout-message {
-    padding: 16px;
-}
-
-.logout-modal .modal-content {
-    max-width: 280px;
-}
-
-.logout-modal .btns-group {
-    display: flex;
-}
-
-.logout-modal .btns-group button {
-    flex: 1;
 }

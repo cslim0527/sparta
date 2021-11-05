@@ -1,6 +1,5 @@
 function schedule() {
     var day = $('input[name="day"]');
-
     var days = $.map(day, function (v) {
             return v.checked
         }
@@ -37,7 +36,7 @@ function schedule() {
         },
         success: function (response) {
             alert(response["msg"]);
-            window.location.href = '/'
+            // window.location.reload()
         }
     })
 }

@@ -2,12 +2,6 @@
     font-family: "Do Hyeon", sans-serif;
 }
 
-.date {
-    width: 600px;
-    margin: 200px auto 50px auto;
-    display: block;
-}
-
 input-date {
     margin-top: 150px;
     margin-bottom: 24px;
@@ -15,9 +9,7 @@ input-date {
 
 
 .content {
-    width: 600px;
-    margin: auto;
-    display: block;
+    margin: 30px auto 50px auto;
 }
 
 .btn-register {
@@ -42,10 +34,52 @@ input-content {
 }
 
 .time {
-    margin: 3px 60px 0px 170px;
+    text-align: center;
+}
+
+.button {
+    margin-bottom: 150px;
+    margin-top: 30px;
+    width: 330px;
+    height: 50px;
+    display: inline-block;
+    align-items: center;
+}
+
+.button1{
+    margin-right: 10px;
+}
+
+.button{
+    margin-left: 10px;
+}
+
+.select {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 80px;
+    height: 50px;
+}
+
+.check {
+    display: inline-block;
+}
+
+.weekday {
+    font-size: 11px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 50%;
+    border: 1px solid #eaeaea;
+    margin-right: 5px;
 }
 
 .wrap {
-    margin-top: 150px;
-    margin-bottom: 200px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px;
+    align-items: center;
+    text-align: center;
 }

@@ -147,3 +147,18 @@
     padding: 10px;
     line-height: 1.83;
 }
+
+/* list-ctrls */
+.list-ctrls {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+    font-size: 13px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.list-ctrls button,
+.list-ctrls select {
+    font-size: inherit;
+    margin-left: 10px;
+}

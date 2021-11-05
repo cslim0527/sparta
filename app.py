@@ -1,3 +1,4 @@
+from bson.json_util import dumps
 from flask import Flask, redirect, url_for, render_template, jsonify, request, session
 import jwt
 from datetime import datetime, timedelta
@@ -32,7 +33,7 @@ def home():
         for item in schd_data:
             item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
-        return render_template('lists.html', schd_data=schd_data)
+        return render_template('lists.html', schd_data=schd_data, userId=member)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -51,7 +52,11 @@ def register():
 @app.route('/write')
 def write():
     token_receive = request.cookies.get('mytoken')
+    u_id = request.args.get('u_id')
     if token_receive is not None:
+        if u_id is not None:
+            schedules = db.schedule.find_one({'_id': ObjectId(u_id)})
+            return render_template('write.html', schedules=schedules)
         return render_template('write.html')
     else:
         return render_template('write.html', isLogin=False, msg='로그인 후 이용하세요.')
@@ -167,6 +172,29 @@ def api_remove():
         return jsonify({'result': 'success'})
     else:
         return jsonify({'result': 'fail', 'msg': '선택된 스케줄이 없습니다.'})
+
+# [리스트 정렬 API]
+@app.route('/api/sort', methods=['POST'])
+def api_sort():
+    filtered_receive = request.form['filtered_give']
+
+    if filtered_receive: ## 금일 스케줄 보기중 일때
+        id_receive = request.form['id_give']
+        action_receive = request.form['action_give']
+        now_receive = request.form.getlist('now_give[]')
+        return jsonify({'result': '필터있음'})
+    else:
+        id_receive = request.form['id_give']
+        filter_data = list(db.schedule.find({'id': id_receive}))
+        return jsonify({'result': dumps(filter_data)})
+
+
+# [리스트 필터 API]
+@app.route('/api/filter', methods=['POST'])
+def api_filter():
+    id_receive = request.form['id_give']
+    filter_data = list(db.schedule.find({'id': id_receive}))
+    return jsonify({'result': dumps(filter_data)})
 
 
 if __name__ == '__main__':

@@ -263,3 +263,6 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv
 .idea/00_project.iml
 .idea/workspace.xml
+.idea/00_project.iml
+.idea/vcs.xml
+.idea/workspace.xml

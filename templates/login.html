@@ -44,7 +44,7 @@
                 console.log(response)
                 if (response['result'] == 'success') {
                     $.cookie('mytoken', response['token'], {path: '/'});
-                    window.location.replace("/")
+                    window.location.href = "/"
                 } else {
                     alert(response['msg'])
                 }
@@ -58,9 +58,6 @@
     }
 
     $(function () {
-        $("#login").on('click', function () {
-            login();
-        });
         $('.input').keyup(function (e) {
             if (e.keyCode == 13) {
                 login();

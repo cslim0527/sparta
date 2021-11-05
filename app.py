@@ -20,7 +20,7 @@ SECRET_KEY = 'SPARTA'
 ##  HTML을 주는 부분             ##
 #################################
 
-#스케쥴 출력(메인화면)
+# 스케쥴 출력(메인화면)
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -39,14 +39,17 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login"))
 
+
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
+
 @app.route('/register')
 def register():
     return render_template('register.html')
+
 
 # 스케줄 작성페이지
 @app.route('/write')
@@ -71,19 +74,19 @@ def write():
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
 @app.route('/api/write', methods=['POST'])
 def api_write():
-    token_receive = request.cookies.get('mytoken')  #토큰 받아서 디코드
+    token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
     id_receive = payload['id']
     title_receive = request.form['title_give']
-    content_receive = request.form['content_give'] #추가 필요
-    time1_receive = request.form['time1_give']  #time1 -> hour
-    time2_receive = request.form['time2_give']  #time2 -> minute
+    content_receive = request.form['content_give']  # 추가 필요
+    time1_receive = request.form['time1_give']  # time1 -> hour
+    time2_receive = request.form['time2_give']  # time2 -> minute
     day_receive = request.form.getlist('day_give[]')
     doc = {
         "id": id_receive,
         "subject": title_receive,
-        "time": time1_receive + ':' + time2_receive, #시간
+        "time": time1_receive + ':' + time2_receive,  # 시간
         "day": day_receive,
         "content": content_receive
     }
@@ -91,24 +94,27 @@ def api_write():
     db.schedule.insert_one(doc)
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
+
 @app.route('/api/register', methods=['POST'])
 def api_register():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     doc = {
-        "id": id_receive,                               # 아이디
-        "pw": pw_hash,                                  # 비밀번호
+        "id": id_receive,  # 아이디
+        "pw": pw_hash,  # 비밀번호
     }
     db.member.insert_one(doc)
     return jsonify({'result': 'success'})
 
-#아이디 중복확인 서버
+
+# 아이디 중복확인 서버
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
     id_receive = request.form['id_give']
     exists = bool(db.member.find_one({"id": id_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
@@ -123,8 +129,8 @@ def api_login():
 
     if result is not None:
         payload = {
-         'id': id_receive,
-         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+            'id': id_receive,
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -132,6 +138,7 @@ def api_login():
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
 
 # [유저 정보 확인 API]
 # 로그인된 유저만 call 할 수 있는 API입니다.
@@ -199,8 +206,3 @@ def api_filter():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
-
-
-
-

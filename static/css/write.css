@@ -1,29 +1,34 @@
 * {
     font-family: "Do Hyeon", sans-serif;
+
 }
 
 .date {
-    width: 600px;
-    margin: 200px auto 50px auto;
-    display: block;
+
+    width: 880px;
+
 }
 
-input-date {
+.drop-time {
+    width: 80px;
+    height: 50px;
+}
+
+.input-date {
     margin-top: 150px;
     margin-bottom: 24px;
 }
 
 
 .content {
-    width: 600px;
+    width: 880px;
     margin: auto;
-    display: block;
 }
 
 .btn-register {
     width: 100px;
     margin: auto;
-    display: block;
+    display: flex;
 }
 
 .input-option {
@@ -36,16 +41,52 @@ input-content {
 }
 
 .check-box {
-    width: 450px;
-    margin-left: auto;
-    display: block;
+    width: 300px;
+    align-items: center;
+    display: inline-block;
+    text-align: center;
 }
 
 .time {
-    margin: 3px 60px 0px 170px;
+    text-align: center;
+}
+
+.button {
+    margin-left: 40px;
+    margin-top: 40px;
+    margin-bottom: 150px;
+    width: 380px;
+    height: 50px;
+    display: inline-block;
+    align-items: center;
+}
+
+.select {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 80px;
+    height: 50px;
+}
+
+.check {
+    display: inline-block;
+}
+
+.weekday {
+    font-size: 11px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 50%;
+    border: 1px solid #eaeaea;
+    margin-right: 5px;
 }
 
 .wrap {
-    margin-top: 150px;
-    margin-bottom: 200px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    align-items: center;
+    text-align: center;
 }

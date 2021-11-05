@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+
     <!-- Webpage Title -->
     <title>good4y</title>
 
@@ -19,6 +20,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="../static/js/common.js"></script>
+
     {% block head %} {% endblock %}
 
     <script>
@@ -29,36 +31,37 @@
             window.location.href = '/login'
         }
     </script>
+
 </head>
 <body>
-    <div class="wrapper">
-        <header class="header">
-            <h1>
-                <a href="/">
-                    <img src="../static/images/logo.png" alt="">
-                </a>
-            </h1>
+<div class="wrapper">
+    <header class="header">
+        <h1>
+            <a href="/">
+                <img src="../static/images/logo.png" alt="">
+            </a>
+        </h1>
 
-            <button type="button" data-tooltip="cslim0527@gmail.com" class="logout-btn" id="openLogoutBtn">
-                <i class="far fa-user-circle"></i>
-            </button>
-        </header>
-        {% block content %} {% endblock %}
-    </div>
+        <button type="button" data-tooltip="{{ userId }}" class="logout-btn" id="openLogoutBtn">
+            <i class="far fa-user-circle"></i>
+        </button>
+    </header>
+    {% block content %} {% endblock %}
+</div>
 
-    <div class="modal logout-modal" id="logoutModal">
-        <div class="modal-background" id="modalBg"></div>
-        <div class="modal-content">
-            <div class="box">
-                <div class="logout-message">
-                    오늘도 <b>good4y</b> 되셨나요?
-                </div>
-                <div class="btns-group">
-                    <button type="button" class="button is-danger" id="closeLogoutBtn">아직이요</button>
-                    <button type="button" class="button is-primary" id="logoutBtn">로그아웃</button>
-                </div>
+<div class="modal logout-modal" id="logoutModal">
+    <div class="modal-background" id="modalBg"></div>
+    <div class="modal-content">
+        <div class="box">
+            <div class="logout-message">
+                오늘도 <b>good4y</b> 되셨나요?
+            </div>
+            <div class="btns-group">
+                <button type="button" class="button is-danger" id="closeLogoutBtn">아직이요</button>
+                <button type="button" class="button is-primary" id="logoutBtn">로그아웃</button>
             </div>
         </div>
     </div>
-    </body>
+</div>
+</body>
 </html>

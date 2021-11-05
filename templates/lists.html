@@ -1,13 +1,47 @@
+
 {% extends "index.html" %}
 {% block head %}
     <link rel="stylesheet" href="../static/css/lists.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script defer src="../static/js/lists.js"></script>
+    <script>
+        {#    하늘상태(sky) 맑음(1), 구름많음(3), 흐림(4)#}
+        {#    강수형태(pop) 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)#}
+        {#    기온(tmp)#}
+        {#    basetime 2, 5, 8, 11, 14, 17, 20, 23 8회/일#}
+        {#    3 나눠서 나머지에 따라 더해준다?#}
+
+        function weather(nx, ny) { //기상청 api 조회하기 area=> 회원정보에서 받기
+            var today = new Date();
+            var hours = ('0' + today.getHours()).slice(-2);
+            if (hours % 3 != 2)
+                hours = (hours % 3 == 0 ? hours - 1 : hours - 2)
+            var minutes = ('0' + today.getMinutes()).slice(-2);
+            var timeString = hours + '00';
+            var year = today.getFullYear();
+            var month = ('0' + (today.getMonth() + 1)).slice(-2);
+            var day = ('0' + today.getDate()).slice(-2);
+            var dateString = year + month + day;
+
+            serviceKey = 'OOH9Erw93X1Lk223Bku2k%2FdZPNnhauLD%2FC8%2BL%2Fy29Zhldy5YRVPPtpAz6PINeWy15lu1IPJ88xLqIHv9Orb9PA%3D%3D'
+            baseDate = dateString
+            baseTime = timeString
+
+            $.ajax({
+                type: "GET",
+                url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=" + serviceKey + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny + "&pageNo=1&numOfRows=14&dataType=JSON",
+                data: {},
+                success: function (response) {
+                }
+            })
+        }
+    </script>
 {% endblock %}
 
 {% block content %}
-<div class="weather">
-    여기에 날씨 받기
-</div>
+    <div class="weather">
+        <button onclick="weather(55, 127)">전체선택</button>
+    </div>
     <section class="lists-view">
         <input type="hidden" value="{{ userId }}" id="globalUserId">
 

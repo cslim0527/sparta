@@ -32,8 +32,8 @@ def home():
         area = ["60", "126"]
 
         # 시간 정보 AM/PM 포맷팅
-        for item in schd_data:
-            item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
+        # for item in schd_data:
+        #     item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
         return render_template('lists.html', schd_data=schd_data, area=area, userId=member)  # area = area => 지역정보 넘겨주기
     except jwt.ExpiredSignatureError:
@@ -91,6 +91,31 @@ def api_write():
 
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
+
+@app.route('/api/edit', methods=['POST'])
+def api_edit():
+    token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+    id_receive = payload['id']
+    title_receive = request.form['title_give']
+    content_receive = request.form['content_give']  # 추가 필요
+    time1_receive = request.form['time1_give']  # time1 -> hour
+    time2_receive = request.form['time2_give']  # time2 -> minute
+    day_receive = request.form.getlist('day_give[]')
+    doc = {
+        "id": id_receive,
+        "subject": title_receive,
+        "time": time1_receive + ':' + time2_receive,  # 시간
+        "day": day_receive,
+        "content": content_receive
+    }
+
+    db.schedule.update_one(doc)
+
+    return jsonify({'result': 'success', 'msg': '수정되었습니다.'})
+
+
 @app.route('/api/register', methods=['POST'])
 def api_register():
     id_receive = request.form['id_give']
@@ -133,9 +158,6 @@ def api_login():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
-@app.route('/api/weather', methods=['GET']) #도시의 nx, ny 정보를 받아 날씨 정보를 얻는다
-def weather_receive():{}
-
 
 # [찬수] 20211103
 # [리스트 삭제 API]
@@ -150,12 +172,13 @@ def api_remove():
     else:
         return jsonify({'result': 'fail', 'msg': '선택된 스케줄이 없습니다.'})
 
+
 # [리스트 정렬 API]
 @app.route('/api/sort', methods=['POST'])
 def api_sort():
     filtered_receive = request.form['filtered_give']
 
-    if filtered_receive: ## 금일 스케줄 보기중 일때
+    if filtered_receive:  ## 금일 스케줄 보기중 일때
         id_receive = request.form['id_give']
         action_receive = request.form['action_give']
         now_receive = request.form.getlist('now_give[]')

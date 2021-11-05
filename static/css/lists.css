@@ -118,6 +118,9 @@
     color: #fff;
     border-color: #e12147;
 }
+.lists-view {
+    min-height: 400px;
+}
 
 .lists-view .remove-btn {
     display: none;

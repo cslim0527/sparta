@@ -1,3 +1,4 @@
+from operator import itemgetter
 from bson.json_util import dumps
 from flask import Flask, redirect, url_for, render_template, jsonify, request, session
 import jwt
@@ -181,16 +182,55 @@ def api_remove():
 @app.route('/api/sort', methods=['POST'])
 def api_sort():
     filtered_receive = request.form['filtered_give']
+    action_receive = request.form['action_give']
 
-    if filtered_receive:  ## 금일 스케줄 보기중 일때
-        id_receive = request.form['id_give']
-        action_receive = request.form['action_give']
+    ## 금일 스케줄 보기중 일때
+    if filtered_receive == 'filtered':
+        arr = []
         now_receive = request.form.getlist('now_give[]')
-        return jsonify({'result': '필터있음'})
+
+        if action_receive == 'normal':
+            for _id in now_receive:
+                listArr = db.schedule.find_one({'_id': ObjectId(_id)})
+                arr.append(listArr)
+            return jsonify({'result': dumps(arr)})
+        elif action_receive == 'fast':
+            for _id in now_receive:
+                listArr = db.schedule.find_one({'_id': ObjectId(_id)})
+                arr.append(listArr)
+                arr = sorted(arr, key=itemgetter('time'))
+            return jsonify({'result': dumps(arr)})
+        elif action_receive == 'week':
+            for _id in now_receive:
+                listArr = db.schedule.find_one({'_id': ObjectId(_id)})
+                arr.append(listArr)
+
+            sortedArr = []
+            for i in range(len(arr), 0, -1):
+                if (arr[i-1]['day'][-1] == 'false'):
+                    sortedArr.append(arr[i-1])
+                else:
+                    sortedArr.insert(0, arr[i-1])
+            return jsonify({'result': dumps(sortedArr)})
+        
+    ## 전체 스케줄 보기중 일때
     else:
         id_receive = request.form['id_give']
         filter_data = list(db.schedule.find({'id': id_receive}))
-        return jsonify({'result': dumps(filter_data)})
+
+        if action_receive == 'normal':
+            return jsonify({'result': dumps(filter_data)})
+        elif action_receive == 'fast':
+            arr = sorted(filter_data, key=itemgetter('time'))
+            return jsonify({'result': dumps(arr)})
+        elif action_receive == 'week':
+            sortedArr = []
+            for i in range(len(filter_data), 0, -1):
+                if (filter_data[i - 1]['day'][-1] == 'false'):
+                    sortedArr.append(filter_data[i - 1])
+                else:
+                    sortedArr.insert(0, filter_data[i - 1])
+            return jsonify({'result': dumps(sortedArr)})
 
 
 # [리스트 필터 API]

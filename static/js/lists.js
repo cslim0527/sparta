@@ -7,6 +7,8 @@
     const $listWrap = $('#listWrap')
     const $listCtrls = $('#listCtrls')
     const $listSortSel = $('#listSortSel')
+    const loadingSpinner = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>'
+    let nowListIds = []
 
     // 삭제 모드 토글
     $removeModeBtn.click(function () {
@@ -54,7 +56,9 @@
             type: "GET",
             url: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=" + serviceKey + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny + "&pageNo=1&numOfRows=14&_type=json",
             data: {},
-            success: function (response) {}
+            success: function (response) {
+                console.log(response)
+            }
         })
     }
 
@@ -111,19 +115,25 @@
             // [MEMO] $(selector).data('mode', 'filtered')
             // 다른 곳에서는 잘 먹히던 메서드가 왜 안되는지 확인해 볼것...
             this.dataset.mode = ''
-            $(this).text('금일 스케줄 보기')
+            $(this).text('오늘할일 보기')
+            $listSortSel.val('normal')
             ajaxListFilter(false)
         } else {
             this.dataset.mode = 'filtered'
             $(this).text('전체보기')
+            $listSortSel.val('normal')
             ajaxListFilter(true)
         }
+    })
+
+    $listSortSel.change(function () {
+        const action = $(this).val()
+        ajaxListSort(action)
     })
 
     function ajaxListSort(action) {
         // [MEMO] data-mode 값이 제대로 안잡힘..
         const filtered = document.getElementById('todayFilterBtn').dataset.mode
-        const nowListIds = getNowLists()
 
         $.ajax({
             type: "POST",
@@ -135,11 +145,10 @@
                 now_give: nowListIds
             },
             success: function (response) {
-                console.log(response)
-                // const data = JSON.parse(response.result)
-                // console.log(data)
-                // const allListHtmls = getAllLists(data)
-                // $listWrap.html(allListHtmls)
+                const data = JSON.parse(response.result)
+                console.log(data)
+                const allListHtmls = getAllLists(data)
+                $listWrap.html(allListHtmls)
             }
         })
     }
@@ -150,30 +159,37 @@
         })
     }
 
-    $listSortSel.change(function () {
-        const action = $(this).val()
-        ajaxListSort(action)
-    })
-
     // 오늘할일 보기 동작
     function ajaxListFilter(filter = true) {
-        $.ajax({
-            type: "POST",
-            url: "/api/filter",
-            data: {
-                id_give: $('#globalUserId').val(),
-            },
-            success: function (response) {
-                const data = JSON.parse(response.result)
-                if (filter) {
-                    const filteredListHtmls = getFilteredLists(data)
-                    $listWrap.html(filteredListHtmls)
-                } else {
-                    const allListHtmls = getAllLists(data)
-                    $listWrap.html(allListHtmls)
+        $listWrap.html(loadingSpinner)
+        $todayFilterBtn.attr('disabled', true)
+
+        setTimeout(function () {
+            $.ajax({
+                type: "POST",
+                url: "/api/filter",
+                data: {
+                    id_give: $('#globalUserId').val(),
+                },
+                success: function (response) {
+                    const data = JSON.parse(response.result)
+
+                    if (filter) {
+                        const filteredListHtmls = getFilteredLists(data)
+                        $listWrap.html(filteredListHtmls)
+                        $todayFilterBtn.attr('disabled', false)
+
+                       // 금일 보기중 다중 정렬을 위한 초기 배열 상태 저장
+                        nowListIds = getNowLists()
+                        // console.log('nowList:', nowListIds)
+                    } else {
+                        const allListHtmls = getAllLists(data)
+                        $listWrap.html(allListHtmls)
+                        $todayFilterBtn.attr('disabled', false)
+                    }
                 }
-            }
-        })
+            })
+        }, 500)
     }
 
     function getFilteredLists(listArr) {
@@ -200,24 +216,36 @@
     }
 
     function getListHtmls(data) {
-        let i = 1
+        let i = i++
         const daysTemp = getDayIconTemp(data.day)
+        const formattedTime =  getAMPM(data.time)
 
         return `<li class="schd-item schdItem">
                     <div class="round-cb">
-                        <input type="checkbox" id="listItem${i++}" value="${data._id.$oid}" class="uid">
-                        <label for="listItem${i++}" class="fas fa-check-circle"></label>
+                        <input type="checkbox" id="listItem${i}" value="${data._id.$oid}" class="uid">
+                        <label for="listItem${i}" class="fas fa-check-circle"></label>
                     </div>
                     
                     <div class="days">${daysTemp}</div>
 
                     <strong class="title textover">${data.subject}</strong>
-                    <small class="time"><b>PM 12:00</b></small>
+                    <small class="time"><b>${formattedTime.AMPM} ${formattedTime.HHMM}</b></small>
                     <p class="summary textover">${data.content}</p>
                     <a href="/write?u_id=${data._id.$oid}" class="mod-item-btn modItemBtn">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                 </li>`
+    }
+
+    function getAMPM(time) {
+        const today = moment().format('YYYY-MM-DD')
+        const fullDate = `${today} ${time}`
+        const AMPM = moment(fullDate).format('A')
+        const HHMM = moment(fullDate).format('hh:mm')
+        return {
+            AMPM,
+            HHMM
+        }
     }
 
     function getDayIconTemp(dayArr) {
@@ -233,5 +261,26 @@
             return html += el
         }, '')
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 })()

@@ -9,6 +9,8 @@
     여기에 날씨 받기
 </div>
     <section class="lists-view">
+        <input type="hidden" value="{{ userId }}" id="globalUserId">
+
         <div class="container">
             <div class="btns-group">
                 <div class="group before-group" id="beforeGroup">
@@ -21,8 +23,19 @@
                 </div>
             </div>
 
+            <div class="list-ctrls" id="listCtrls">
+                <div class="select">
+                    <select id="listSortSel">
+                        <option value="normal">입력순</option>
+                        <option value="fast">시간빠른순</option>
+                        <option value="week">매주 우선순</option>
+                    </select>
+                </div>
+                <button class="button" data-mode="" id="todayFilterBtn">오늘할일 보기</button>
+            </div>
+
             {% if schd_data|length %}
-                <ul class="schd-lists">
+                <ul class="schd-lists" id="listWrap">
 
                     {% for item in schd_data %}
                         <!-- 스케줄 1단위 -->
@@ -75,4 +88,5 @@
         </div>
 
     </section>
+
 {% endblock %}

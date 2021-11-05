@@ -27,13 +27,15 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.member.find_one({"id": payload['id']})['id']
+        # area = db.member.find_one({"id": payload['id']})['area']  가입시 입력된 정보로 nx ny 찾아주기
         schd_data = list(db.schedule.find({'id': member}))
+        area = ["60", "126"]
 
         # 시간 정보 AM/PM 포맷팅
         for item in schd_data:
             item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
-        return render_template('lists.html', schd_data=schd_data, userId=member)
+        return render_template('lists.html', schd_data=schd_data, area=area, userId=member)  # area = area => 지역정보 넘겨주기
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -72,7 +74,7 @@ def write():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@app.route('/api/write', methods=['POST'])
+@app.route('/api/write', methods=['POST', 'GET'])
 def api_write():
     token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -92,6 +94,7 @@ def api_write():
     }
 
     db.schedule.insert_one(doc)
+
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
 

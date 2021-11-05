@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <!-- Webpage Title -->
+    <title>good4y</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+    <script type="text/javascript">
+
+
+    </script>
+
+    <style type="text/css">
+        * {
+            font-family: "Do Hyeon", sans-serif;
+        }
+
+        .date {
+            width: 600px;
+            margin: 200px auto 50px auto;
+            display: block;
+        }
+
+        input-date {
+            margin-top: 150px;
+            margin-bottom: 24px;
+        }
+
+
+        .content {
+            width: 600px;
+            margin: auto;
+            display: block;
+        }
+
+        .btn-register {
+            width: 100px;
+            margin: 50px auto 150px auto;
+            display: block;
+        }
+
+        .input-option {
+            margin-bottom: 50px;
+        }
+
+        input-content {
+            width: 500px;
+            height: 300px;
+        }
+
+        .check-box {
+            width: 450px;
+            margin-left: auto;
+            display: block;
+        }
+
+        .time {
+            margin: 3px 60px 0px 170px;
+        }
+
+        .wrap {
+            margin-top: 150px;
+            margin-bottom: 200px;
+        }
+
+
+    </style>
+    <script>
+        function schedule() {
+
+            let time1 = $('#schedule-time1').val();
+            let time2 = $('#schedule-time2').val();
+            let option = $('#schedule-option').val();
+            let title = $('#schedule-title').val();
+            let content = $('#schedule-content').val();
+
+            if (title == "") {
+                $("#schedule-title").text("제목을 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#schedule-title").focus()
+                return;
+            }
+
+            if (content == "") {
+                $("#schedule-content").text("제목을 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#schedule-content").focus()
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/schedule",
+                data: {
+                    time1_give: time1,
+                    time2_give: time2,
+                    option_give: option,
+                    title_give: title,
+                    content_give: content
+                },
+                success: function (response) {
+                    alert(response["msg"]);
+                    window.location.reload()
+                }
+            })
+        }
+
+        function doSave() {
+            let days = document.getElementsByName("day");
+            let checked_day = [];
+            for (let i = 0; i < days.length; i++) {
+                if (days[i].checked) {
+                    checked_day.push(days[i].value);
+                }
+
+                if (checked_day == 0) {
+                    alert('선택된 체크박스가 없습니다');
+                    return false;
+                }
+
+                document.frm.action = "delete.php";
+                document.frm.submit();
+
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="date">
+        <div class="check-box">
+            <form method="get" action="javascript:doSave(document.frm);">
+                <label><input type="checkbox" name="day" value="monday"> 월</label>
+                <label><input type="checkbox" name="day" value="tuesday"> 화</label>
+                <label><input type="checkbox" name="day" value="wednesday"> 수</label>
+                <label><input type="checkbox" name="day" value="thursday"> 목</label>
+                <label><input type="checkbox" name="day" value="friday"> 금</label>
+                <label><input type="checkbox" name="day" value="saturday"> 토</label>
+                <label><input type="checkbox" name="day" value="sunday"> 일</label>
+                <label><input type="checkbox" name="day" value="everyweek"> 매주</label>
+            </form>
+
+        </div>
+
+        <div class="input-group mb-3 input-option">
+
+            <h6 class="time">시간을 선택하세요</h6>
+            <br>
+            <div>
+                <select id="schedule-time1" name=hourOpt onChange="alarmSet()" size=1>
+                    <option value="00">00
+                    <option value="01">01
+                    <option value="02">02
+                    <option value="03">03
+                    <option value="04">04
+                    <option value="05">05
+                    <option value="06">06
+                    <option value="07">07
+                    <option value="08">08
+                    <option value="09">09
+                    <option value="10">10
+                    <option value="11">11
+                    <option selected value="12">12
+                    <option value="13">13
+                    <option value="14">14
+                    <option value="15">15
+                    <option value="16">16
+                    <option value="17">17
+                    <option value="18">18
+                    <option value="19">19
+                    <option value="20">20
+                    <option value="21">21
+                    <option value="22">22
+                    <option value="23">23
+                    </option>
+                </select>
+                <select id="schedule-time2" name=minOpt onChange="alarmSet()" size=1>
+                    <option selected value="00">00
+                    <option value="01">01
+                    <option value="02">02
+                    <option value="03">03
+                    <option value="04">04
+                    <option value="05">05
+                    <option value="06">06
+                    <option value="07">07
+                    <option value="08">08
+                    <option value="09">09
+                    <option value="10">10
+                    <option value="11">11
+                    <option value="12">12
+                    <option value="13">13
+                    <option value="14">14
+                    <option value="15">15
+                    <option value="16">16
+                    <option value="17">17
+                    <option value="18">18
+                    <option value="19">19
+                    <option value="20">20
+                    <option value="21">21
+                    <option value="22">22
+                    <option value="23">23
+                    <option value="24">24
+                    <option value="25">25
+                    <option value="26">26
+                    <option value="27">27
+                    <option value="28">28
+                    <option value="29">29
+                    <option value="30">30
+                    <option value="31">31
+                    <option value="32">32
+                    <option value="33">33
+                    <option value="34">34
+                    <option value="35">35
+                    <option value="36">36
+                    <option value="37">37
+                    <option value="38">38
+                    <option value="39">39
+                    <option value="40">40
+                    <option value="41">41
+                    <option value="42">42
+                    <option value="43">43
+                    <option value="44">44
+                    <option value="45">45
+                    <option value="46">46
+                    <option value="47">47
+                    <option value="48">48
+                    <option value="49">49
+                    <option value="50">50
+                    <option value="51">51
+                    <option value="52">52
+                    <option value="53">53
+                    <option value="54">54
+                    <option value="55">55
+                    <option value="56">56
+                    <option value="57">57
+                    <option value="58">58
+                    <option value="59">59
+                    </option>
+                </select>
+            </div>
+
+
+        </div>
+
+        <div class="input-group mb-3 input-option">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="schedule-option">스케줄</label>
+            </div>
+            <select class="custom-select" id="schedule-option">
+                <!--                <option selected>-&#45;&#45;어떤 스케쥴을 추가할까요?-&#45;&#45;</option>-->
+                <option value="today-schedule">오늘 일정</option>
+                <!--            <option value="2">Two</option>-->
+                <!--            <option value="3">Three</option>-->
+            </select>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="box">
+            <label class="label">제목</label>
+            <input id="schedule-title" class="input is-normal" type="text" placeholder="제목을 입력하세요">
+            <label class="label">내용</label>
+            <textarea id="schedule-content" class="textarea" placeholder="내용을 입력하세요" rows="10"></textarea>
+        </div>
+    </div>
+    <button class="button is-primary btn-register" onclick="schedule()">등록하기</button>
+
+</div>
+
+
+</body>
+
+</html>

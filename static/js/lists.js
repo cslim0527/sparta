@@ -204,9 +204,9 @@
         return htmls
     }
 
-    function getAllLists(listArr) {
-        return listArr.reduce((html, item) => {
-            return html += getListHtmls(item)
+   function getAllLists(listArr) {
+        return listArr.reduce((html, item, idx) => {
+            return html += getListHtmls(item, idx)
         }, '')
     }
 
@@ -215,16 +215,14 @@
         return dayIdx - 1 <= 0 ? 6 : dayIdx - 1
     }
 
-    function getListHtmls(data) {
-        let i = 0
-        i++
+    function getListHtmls(data, idx) {
         const daysTemp = getDayIconTemp(data.day)
         const formattedTime =  getAMPM(data.time)
 
         return `<li class="schd-item schdItem">
                     <div class="round-cb">
-                        <input type="checkbox" id="listItem${i}" value="${data._id.$oid}" class="uid">
-                        <label for="listItem${i}" class="fas fa-check-circle"></label>
+                        <input type="checkbox" id="listItem${idx}" value="${data._id.$oid}" class="uid">
+                        <label for="listItem${idx}" class="fas fa-check-circle"></label>
                     </div>
                     
                     <div class="days">${daysTemp}</div>

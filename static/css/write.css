@@ -3,11 +3,11 @@
 
 }
 
-.date {
+/*.date {*/
 
-    width: 880px;
+/*    width: 880px;*/
 
-}
+/*}*/
 
 .drop-time {
     width: 80px;
@@ -21,8 +21,7 @@
 
 
 .content {
-    width: 880px;
-    margin: auto;
+    margin: 30px auto 50px auto;
 }
 
 .btn-register {
@@ -52,13 +51,20 @@ input-content {
 }
 
 .button {
-    margin-left: 40px;
-    margin-top: 40px;
     margin-bottom: 150px;
-    width: 380px;
+    margin-top: 30px;
+    width: 330px;
     height: 50px;
     display: inline-block;
     align-items: center;
+}
+
+.button1{
+    margin-right: 10px;
+}
+
+.button{
+    margin-left: 10px;
 }
 
 .select {
@@ -86,7 +92,7 @@ input-content {
 .wrap {
     max-width: 960px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px;
     align-items: center;
     text-align: center;
 }

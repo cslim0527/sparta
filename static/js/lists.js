@@ -37,8 +37,9 @@
 
         ajaxRemoveList(removeListArr)
     })
-
-    function weather(nx, ny) { //기상청 api 조회하기
+    //기상청 api 조회하기(구현실패)
+    //문제점 1. CORS 2. 주말의 정보가 금요일에 들어와 금요일의 데이터 정보량이 다른 요일에 비해 많아짐 -> 로딩속도 저하
+    function weather(nx, ny) {
         var today = new Date();
         var hours = ('0' + today.getHours()).slice(-2);
         var minutes = ('0' + today.getMinutes()).slice(-2);
@@ -204,9 +205,9 @@
         return htmls
     }
 
-    function getAllLists(listArr) {
-        return listArr.reduce((html, item) => {
-            return html += getListHtmls(item)
+   function getAllLists(listArr) {
+        return listArr.reduce((html, item, idx) => {
+            return html += getListHtmls(item, idx)
         }, '')
     }
 
@@ -215,16 +216,14 @@
         return dayIdx - 1 <= 0 ? 6 : dayIdx - 1
     }
 
-    function getListHtmls(data) {
-        let i = 0
-        i++
+    function getListHtmls(data, idx) {
         const daysTemp = getDayIconTemp(data.day)
         const formattedTime =  getAMPM(data.time)
 
         return `<li class="schd-item schdItem">
                     <div class="round-cb">
-                        <input type="checkbox" id="listItem${i}" value="${data._id.$oid}" class="uid">
-                        <label for="listItem${i}" class="fas fa-check-circle"></label>
+                        <input type="checkbox" id="listItem${idx}" value="${data._id.$oid}" class="uid">
+                        <label for="listItem${idx}" class="fas fa-check-circle"></label>
                     </div>
                     
                     <div class="days">${daysTemp}</div>

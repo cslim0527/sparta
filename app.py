@@ -16,11 +16,6 @@ db = client.good4y
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
 SECRET_KEY = 'SPARTA'
 
-
-#################################
-##  HTML을 주는 부분             ##
-#################################
-
 #스케쥴 출력(메인화면)
 @app.route('/')
 def home():
@@ -28,25 +23,26 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         member = db.member.find_one({"id": payload['id']})['id']
-        # area = db.member.find_one({"id": payload['id']})['area']  가입시 입력된 정보로 nx ny 찾아주기
-        schd_data = list(db.schedule.find({'id': member}))
+        schd_data = list(db.schedule.find({'id': member}))  #회원정보(member) db와 스케줄정보(schedule) db를 id 값으로 연동
         area = ["60", "126"]
 
         # 시간 정보 AM/PM 포맷팅
         for item in schd_data:
             item['time'] = datetime.strftime(datetime.strptime(item['time'], '%H:%M'), '%p %I:%M')
 
-        return render_template('lists.html', schd_data=schd_data, area=area, userId=member)  # area = area => 지역정보 넘겨주기
+        return render_template('lists.html', schd_data=schd_data, area=area, userId=member)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login"))
 
+#로그인 출력(회원가입을 제외한 회원정보가 필요한 페이지에서 쿠키 없을 시 이 페이지로 리다이렉트)
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
+#회원가입 출력
 @app.route('/register')
 def register():
     return render_template('register.html')
@@ -65,11 +61,6 @@ def write():
     else:
         return render_template('write.html', isLogin=False, msg='로그인 후 이용하세요.')
 
-
-#################################
-##  로그인을 위한 API            ##
-#################################
-
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
@@ -84,6 +75,7 @@ def api_write():
     time1_receive = request.form['time1_give']  #time1 -> hour
     time2_receive = request.form['time2_give']  #time2 -> minute
     day_receive = request.form.getlist('day_give[]')
+
     doc = {
         "id": id_receive,
         "subject": title_receive,
@@ -105,7 +97,7 @@ def api_edit():
     id_receive = payload['id']
     _id = request.form['_id']
     title_receive = request.form['title_give']
-    content_receive = request.form['content_give']  # 추가 필요
+    content_receive = request.form['content_give']
     time1_receive = request.form['time1_give']  # time1 -> hour
     time2_receive = request.form['time2_give']  # time2 -> minute
     day_receive = request.form.getlist('day_give[]')
@@ -155,8 +147,11 @@ def api_login():
     if result is not None:
         payload = {
          'id': id_receive,
-         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지 => hour 또는 day
         }
+
+        # .decode('utf-8')붙이면 서버에서 작동가능, 떼면 로컬에서 작동
+        # jwt 이용 사용자 정보 암호화(단방향 암호화로 개발자가 사용자의 암호를 볼 수 없게함)
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
@@ -191,6 +186,7 @@ def api_sort():
         arr = []
         now_receive = request.form.getlist('now_give[]')
 
+        #DB에 저장된 고유 ID 값을 이용한 스케줄 조회 및 정렬
         if action_receive == 'normal':
             for _id in now_receive:
                 listArr = db.schedule.find_one({'_id': ObjectId(_id)})

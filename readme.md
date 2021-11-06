@@ -24,7 +24,7 @@ https://www.youtube.com/watch?v=j1B1QrQdU0c
 - MongoDB
 - jquery
 - AWS EC2 (Ubuntu 18.04 LTS)
-- 
+
 # 개발자
 - 임찬수 : 메인페이지(리스트 페이지)
 - 이해원 : 회원가입, 로그인 페이지

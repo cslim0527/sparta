@@ -14,3 +14,6 @@ http://good4y.shop
 - 이해원 : 회원가입, 로그인 페이지
 - 김자운 : 글 작성, 글 수정 페이지
 - 김영철 : 백엔드
+
+# 회고록
+- 임찬수 : https://velog.io/@cslim0527/%ED%95%AD%ED%95%B4-1%EC%A3%BC%EC%B0%A8-%ED%9A%8C%EA%B3%A0%EB%A1%9D

@@ -42,8 +42,9 @@
         // 삭제 API로 배열값 전달
         ajaxRemoveList(removeListArr)
     })
-
-    function weather(nx, ny) { //기상청 api 조회하기
+    //기상청 api 조회하기(구현실패)
+    //문제점 1. CORS 2. 주말의 정보가 금요일에 들어와 금요일의 데이터 정보량이 다른 요일에 비해 많아짐 -> 로딩속도 저하
+    function weather(nx, ny) {
         var today = new Date();
         var hours = ('0' + today.getHours()).slice(-2);
         var minutes = ('0' + today.getMinutes()).slice(-2);

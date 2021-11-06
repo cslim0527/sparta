@@ -12,13 +12,14 @@ app = Flask(__name__)
 client = MongoClient('mongodb://15.164.50.18', 27017, username="test", password="test")
 db = client.good4y
 
-# JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
 SECRET_KEY = 'SPARTA'
+
 
 #스케쥴 출력(메인화면)
 @app.route('/')
 def home():
+
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -61,15 +62,7 @@ def write():
         return render_template('write.html', isLogin=False, msg='로그인 후 이용하세요.')
 
 
-#################################
-##  로그인을 위한 API            ##
-#################################
 
-# [회원가입 API]
-# id, pw, nickname을 받아서, mongoDB에 저장합니다.
-# 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-
-# 작성페이지
 @app.route('/api/write', methods=['POST', 'GET'])
 def api_write():
 
@@ -124,6 +117,9 @@ def api_edit():
     return jsonify({'result': 'success', 'msg': '수정되었습니다.'})
 
 
+# [회원가입 API]
+# id, pw 를 받아서, mongoDB에 저장
+# 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장
 @app.route('/api/register', methods=['POST'])
 def api_register():
     id_receive = request.form['id_give']
@@ -136,7 +132,8 @@ def api_register():
     db.member.insert_one(doc)
     return jsonify({'result': 'success'})
 
-#아이디 중복확인 서버
+#[아이디 중복확인 API]
+# 이메일을 db에서 찾아서 클라이언트로 전달
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
     id_receive = request.form['id_give']
@@ -144,7 +141,7 @@ def check_dup():
     return jsonify({'result': 'success', 'exists': exists})
 
 # [로그인 API]
-# id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
+# id, pw를 받아서 맞춰보고, 토큰을 만들어 발급
 @app.route('/api/login', methods=['POST'])
 def api_login():
     # 로그인

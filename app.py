@@ -16,11 +16,6 @@ db = client.good4y
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
 SECRET_KEY = 'SPARTA'
 
-
-#################################
-##  HTML을 주는 부분             ##
-#################################
-
 #스케쥴 출력(메인화면)
 @app.route('/')
 def home():
@@ -73,14 +68,19 @@ def write():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
+
+# 작성페이지
 @app.route('/api/write', methods=['POST', 'GET'])
 def api_write():
+
     token_receive = request.cookies.get('mytoken')  #토큰 받아서 디코드
+    # 로그인된  jwt 디코드하여 payload설정
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
+    # db schedule에 들어갈 정보들 dictionary 작성
     id_receive = payload['id']
     title_receive = request.form['title_give']
-    content_receive = request.form['content_give'] #추가 필요
+    content_receive = request.form['content_give']
     time1_receive = request.form['time1_give']  #time1 -> hour
     time2_receive = request.form['time2_give']  #time2 -> minute
     day_receive = request.form.getlist('day_give[]')
@@ -92,11 +92,12 @@ def api_write():
         "content": content_receive
     }
 
+    # db에 저장하기
     db.schedule.insert_one(doc)
 
     return jsonify({'result': 'success', 'msg': '작성되었습니다.'})
 
-
+# 수정페이지
 @app.route('/api/edit', methods=['POST'])
 def api_edit():
     token_receive = request.cookies.get('mytoken')  # 토큰 받아서 디코드
@@ -117,6 +118,7 @@ def api_edit():
         "content": content_receive
     }
 
+    # 수정된 내용들을 db shedule에 업로드 해주기
     db.schedule.update_one({'_id': ObjectId(_id)}, {'$set': doc})
 
     return jsonify({'result': 'success', 'msg': '수정되었습니다.'})

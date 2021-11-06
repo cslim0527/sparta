@@ -15,10 +15,12 @@
 {% endblock %}
 
 {% block content %}
+{#    schedules에서 값을 받아오는 수정페이지와 받아오지 않는 작성페이지를 나눠주기#}
     {% if schedules %}
         <div class="wrap">
             <div class="date">
                 <div class="check-box">
+{#                    db schedule에 체크박스가 체크된 것으로 저장되어 있으면 체크표시 해주기#}
                     <form method="get" action="">
                         <label><input type="checkbox" name="day"
                                       value="monday" {{ "checked" if schedules.day[0] == "true" else "" }}> 월</label>
@@ -41,6 +43,7 @@
                     </form>
                 </div>
                 <div>
+{#                    shedule에 저장된 time값을 : 기준으로 시간과 분으로 나눠서 값 가져온뒤 그 값에 select해서 보여주기#}
                     <div class="select">
                         <select id="schedule-time1">
                             <option value="00" {{ "selected" if schedules.time.split(':')[0] == '00' else "" }}>00
